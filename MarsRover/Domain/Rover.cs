@@ -1,8 +1,7 @@
 ﻿using System;
 using MarsRover.Enums;
-using MarsRover.Helpers;
 
-namespace MarsRover.Classes
+namespace MarsRover.Domain
 {
     public class Rover
     {
