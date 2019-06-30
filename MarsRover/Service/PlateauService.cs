@@ -1,28 +1,22 @@
-﻿using System;
-using MarsRover.Domain;
+﻿using MarsRover.Domain;
 
 namespace MarsRover.Service
 {
     internal interface IPlateauService
     {
-        Plateau GetPlateau(string linePlateau);
+        Plateau GetPlateau(Coordinate coordinate);
     }
     internal class PlateauService :IPlateauService
     {
-        public  Plateau GetPlateau(string linePlateau)
+        public Plateau GetPlateau(Coordinate coordinate)
         {
-            var plateauNumbers = linePlateau.Split();
-            var plateauCoordinates = Array.ConvertAll(plateauNumbers, int.Parse);
-
             var plateau = new Plateau
             {
-                Coordinate = new Coordinate
-                {
-                    X = plateauCoordinates[0],
-                    Y = plateauCoordinates[1]
-                }
+                Coordinate = coordinate
             };
             return plateau;
         }
+
+
     }
 }

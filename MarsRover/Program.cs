@@ -16,14 +16,19 @@ namespace MarsRover
 
             var roverService = _serviceProvider.GetService<IRoverService>();
             var plateauService = _serviceProvider.GetService<IPlateauService>();
+            var coordinateService = _serviceProvider.GetService<ICoordinateService>();
 
             Console.WriteLine("Enter plateau dimensions:");
             var linePlateau = Console.ReadLine();
-            var plateau = plateauService.GetPlateau(linePlateau);
+            var array = linePlateau.GetIntArrayByString();
+            var coordinate = coordinateService.GetCoordinate(array[0],array[1]);
+            var plateau = plateauService.GetPlateau(coordinate);
 
             Console.WriteLine("Enter first rover's coordinates and orientation:");
+            var arrayRover = linePlateau.GetIntArrayByString();
+            var coordinateRover = coordinateService.GetCoordinate(arrayRover[0], arrayRover[1]);
             var lineRover = Console.ReadLine();
-            var rover = roverService.GetRover(lineRover, plateau);
+            var rover = roverService.GetRover(lineRover, plateau, coordinateRover);
 
 
             Console.WriteLine("Enter first rover's movements:");
@@ -32,8 +37,10 @@ namespace MarsRover
 
 
             Console.WriteLine("Enter second rover's coordinates and orientation:");
+            var arrayRover1 = linePlateau.GetIntArrayByString();
+            var coordinateRover1 = coordinateService.GetCoordinate(arrayRover1[0], arrayRover1[1]);
             var lineRover1 = Console.ReadLine();
-            var rover1 = roverService.GetRover(lineRover1, plateau);
+            var rover1 = roverService.GetRover(lineRover1, plateau, coordinateRover1);
 
 
             Console.WriteLine("Enter second rover's movements:");

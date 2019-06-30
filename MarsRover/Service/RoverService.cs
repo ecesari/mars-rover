@@ -7,17 +7,16 @@ namespace MarsRover.Service
 {
     internal interface IRoverService
     {
-        Rover GetRover(string lineRover, Plateau plateau);
+        Rover GetRover(string lineRover, Plateau plateau,Coordinate coordinate);
         void MoveRover(string lineMovement, Rover rover);
     }
     internal class RoverService :IRoverService
     {
-        public Rover GetRover(string lineRover, Plateau plateau)
+        public Rover GetRover(string lineRover, Plateau plateau, Coordinate coordinate)
         {
             var roverCoordinates0 = lineRover.Split();
             var rover = new Rover(
-                new Coordinate { X = Convert.ToInt32(roverCoordinates0[0]), Y = Convert.ToInt32(roverCoordinates0[1]) },
-                EnumHelper<OrientationEnum>.GetValueFromName(roverCoordinates0[2]), plateau);
+                coordinate,EnumHelper<OrientationEnum>.GetValueFromName(roverCoordinates0[2]), plateau);
             return rover;
         }
 
