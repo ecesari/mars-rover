@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Dynamic;
 using MarsRover.Classes;
 using MarsRover.Enums;
 using MarsRover.Helpers;
@@ -13,27 +12,35 @@ namespace MarsRover
 
             Console.WriteLine("Enter plateau dimensions:");
             var linePlateau = Console.ReadLine();
-            var plateauNumbers = linePlateau.Split();
-            var plateauCoordinates = Array.ConvertAll(plateauNumbers, int.Parse);
-
-            var plateau = new Plateau
-            {
-                Coordinate = new Coordinate
-                {
-                    X = plateauCoordinates[0],
-                    Y = plateauCoordinates[1]
-                }
-            };
+            var plateau = GetPlateau(linePlateau);
 
             Console.WriteLine("Enter first rover's coordinates and orientation:");
-            var lineRover0 = Console.ReadLine();
-            var roverCoordinates0 = lineRover0.Split();
-            var rover = new Rover(new Coordinate { X = Convert.ToInt32(roverCoordinates0[0]), Y = Convert.ToInt32(roverCoordinates0[1]) }, EnumHelper<OrientationEnum>.GetValueFromName(roverCoordinates0[2]));
+            var lineRover = Console.ReadLine();
+            var rover = GetRover(lineRover, plateau);
 
 
             Console.WriteLine("Enter first rover's movements:");
-            var lineMovement0 = Console.ReadLine();
-            var movements = lineMovement0.ToCharArray();
+            var lineMovement = Console.ReadLine();
+            MoveRover(lineMovement, rover);
+
+
+            Console.WriteLine("Enter second rover's coordinates and orientation:");
+            var lineRover1 = Console.ReadLine();
+            var rover1 = GetRover(lineRover1, plateau);
+
+
+            Console.WriteLine("Enter second rover's movements:");
+            var lineMovement1 = Console.ReadLine();
+            MoveRover(lineMovement1, rover1);
+
+            Console.WriteLine($"Your first rover's coordinates are as follows: {rover.Coordinate.X} {rover.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover.Orientation)}");
+            Console.WriteLine($"Your second rover's coordinates are as follows: {rover1.Coordinate.X} {rover1.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover1.Orientation)}");
+            Console.ReadKey();
+        }
+
+        private static void MoveRover(string lineMovement, Rover rover)
+        {
+            var movements = lineMovement.ToCharArray();
             foreach (var movement in movements)
             {
                 var movementEnum = EnumHelper<MovementEnum>.GetValueFromName(movement.ToString());
@@ -56,10 +63,31 @@ namespace MarsRover
                         throw new ArgumentOutOfRangeException();
                 }
             }
+        }
 
-            Console.WriteLine($"Your rovers coordinates are as follows: {rover.Coordinate.X} {rover.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover.Orientation)}");
-          
-            Console.ReadKey();
+        private static Rover GetRover(string lineRover, Plateau plateau)
+        {
+            var roverCoordinates0 = lineRover.Split();
+            var rover = new Rover(
+                new Coordinate {X = Convert.ToInt32(roverCoordinates0[0]), Y = Convert.ToInt32(roverCoordinates0[1])},
+                EnumHelper<OrientationEnum>.GetValueFromName(roverCoordinates0[2]), plateau);
+            return rover;
+        }
+
+        private static Plateau GetPlateau(string linePlateau)
+        {
+            var plateauNumbers = linePlateau.Split();
+            var plateauCoordinates = Array.ConvertAll(plateauNumbers, int.Parse);
+
+            var plateau = new Plateau
+            {
+                Coordinate = new Coordinate
+                {
+                    X = plateauCoordinates[0],
+                    Y = plateauCoordinates[1]
+                }
+            };
+            return plateau;
         }
     }
 }

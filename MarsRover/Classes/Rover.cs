@@ -8,12 +8,14 @@ namespace MarsRover.Classes
     {
         public Coordinate _coordinate;
         public OrientationEnum _orientation;
+        public Plateau _plateau;
 
 
-        public Rover(Coordinate coordinate, OrientationEnum orientation)
+        public Rover(Coordinate coordinate, OrientationEnum orientation, Plateau plateau)
         {
             _coordinate = coordinate;
             _orientation = orientation;
+            _plateau = plateau;
         }
 
         public Coordinate Coordinate
@@ -28,7 +30,11 @@ namespace MarsRover.Classes
             set => _orientation = value;
         }
 
-
+        public Plateau Plateau
+        {
+            get => _plateau;
+            set => _plateau = value;
+        }
 
         internal void TurnLeft()
         {
@@ -60,6 +66,12 @@ namespace MarsRover.Classes
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+
+            if (Coordinate.X <= Plateau.Coordinate.X && Coordinate.Y <= Plateau.Coordinate.Y) return;
+
+            Console.WriteLine($"Oops! Your rover has fallen off of Mars! It's last known position was: {Coordinate.X} {Coordinate.Y} {Orientation.ToString()}");
+            Console.ReadLine();
+            throw new ArgumentOutOfRangeException();
         }
     }
 }
