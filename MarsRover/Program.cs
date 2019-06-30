@@ -1,4 +1,5 @@
 ﻿using System;
+using MarsRover.Domain;
 using MarsRover.Enums;
 using MarsRover.Helpers;
 using MarsRover.Service;
@@ -25,10 +26,7 @@ namespace MarsRover
             var plateau = plateauService.GetPlateau(coordinate);
 
             Console.WriteLine("Enter first rover's coordinates and orientation:");
-            var arrayRover = linePlateau.GetIntArrayByString();
-            var coordinateRover = coordinateService.GetCoordinate(arrayRover[0], arrayRover[1]);
-            var lineRover = Console.ReadLine();
-            var rover = roverService.GetRover(lineRover, plateau, coordinateRover);
+            var rover = Rover(Console.ReadLine(), coordinateService, roverService, plateau);
 
 
             Console.WriteLine("Enter first rover's movements:");
@@ -37,19 +35,29 @@ namespace MarsRover
 
 
             Console.WriteLine("Enter second rover's coordinates and orientation:");
-            var arrayRover1 = linePlateau.GetIntArrayByString();
-            var coordinateRover1 = coordinateService.GetCoordinate(arrayRover1[0], arrayRover1[1]);
-            var lineRover1 = Console.ReadLine();
-            var rover1 = roverService.GetRover(lineRover1, plateau, coordinateRover1);
+            var rover1 = Rover(Console.ReadLine(), coordinateService, roverService, plateau);
+
 
 
             Console.WriteLine("Enter second rover's movements:");
             var lineMovement1 = Console.ReadLine();
             roverService.MoveRover(lineMovement1, rover1);
 
+
+
             Console.WriteLine($"Your first rover's coordinates are as follows: {rover.Coordinate.X} {rover.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover.Orientation)}");
             Console.WriteLine($"Your second rover's coordinates are as follows: {rover1.Coordinate.X} {rover1.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover1.Orientation)}");
             Console.ReadKey();
+        }
+
+        private static Rover Rover(string line, ICoordinateService coordinateService, IRoverService roverService,
+            Plateau plateau)
+        {
+            var arrayRoverString = line.GetStringArrayByString();
+            var coordinateRover =
+                coordinateService.GetCoordinate(Convert.ToInt32(arrayRoverString[0]), Convert.ToInt32(arrayRoverString[1]));
+            var rover = roverService.GetRover(line, plateau, coordinateRover);
+            return rover;
         }
 
 
@@ -58,6 +66,7 @@ namespace MarsRover
             var collection = new ServiceCollection();
             collection.AddScoped<IRoverService, RoverService>();
             collection.AddScoped<IPlateauService, PlateauService>();
+            collection.AddScoped<ICoordinateService, CoordinateService>();
             _serviceProvider = collection.BuildServiceProvider();
         }
     }

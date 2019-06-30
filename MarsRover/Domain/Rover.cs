@@ -68,7 +68,7 @@ namespace MarsRover.Domain
 
             if (Coordinate.X <= Plateau.Coordinate.X && Coordinate.Y <= Plateau.Coordinate.Y) return;
 
-            Console.WriteLine($"Oops! Your rover has fallen off of Mars! It's last known position was: {Coordinate.X} {Coordinate.Y} {Orientation.ToString()}");
+            Console.WriteLine($"Oops! Your rover will fall off of Mars! It's last position will be: {Coordinate.X} {Coordinate.Y} {Orientation.ToString()}");
             Console.ReadLine();
             throw new ArgumentOutOfRangeException();
         }
