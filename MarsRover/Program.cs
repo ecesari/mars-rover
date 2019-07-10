@@ -44,9 +44,32 @@ namespace MarsRover
             roverService.MoveRover(lineMovement1, rover1);
 
 
+            Console.WriteLine("Enter third rover's coordinates and orientation:");
+            var rover2 = Rover(Console.ReadLine(), coordinateService, roverService, plateau);
 
-            Console.WriteLine($"Your first rover's coordinates are as follows: {rover.Coordinate.X} {rover.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover.Orientation)}");
-            Console.WriteLine($"Your second rover's coordinates are as follows: {rover1.Coordinate.X} {rover1.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover1.Orientation)}");
+
+
+            Console.WriteLine("Enter third rover's movements:");
+            var lineMovement2 = Console.ReadLine();
+            roverService.MoveRover(lineMovement2, rover2);
+
+   
+            var result = !rover.Status ? 
+                $"Your first rover's coordinates are as follows: {rover.PreviousCoordinate.X} {rover.PreviousCoordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover.PreviousOrientation)}" : $"Your first rover's coordinates are as follows: {rover.Coordinate.X} {rover.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover.Orientation)} RIP";
+            Console.WriteLine(result);
+
+
+
+            var result1 = !rover1.Status ? $"Your first rover's coordinates are as follows: {rover1.PreviousCoordinate.X} {rover1.PreviousCoordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover1.PreviousOrientation)}" : $"Your first rover's coordinates are as follows: {rover1.Coordinate.X} {rover1.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover1.Orientation)} RIP";
+            Console.WriteLine(result1);
+
+
+
+            var result2 = !rover2.Status ? $"Your first rover's coordinates are as follows: {rover2.PreviousCoordinate.X} {rover2.PreviousCoordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover2.PreviousOrientation)}" : $"Your first rover's coordinates are as follows: {rover2.Coordinate.X} {rover2.Coordinate.Y} {EnumHelper<OrientationEnum>.GetDisplayValue(rover2.Orientation)} RIP";
+            Console.WriteLine(result2);
+
+
+
             Console.ReadKey();
         }
 

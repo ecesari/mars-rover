@@ -22,12 +22,25 @@ namespace MarsRover.Service
 
         public void MoveRover(string lineMovement, Rover rover)
         {
+          
             var movements = lineMovement.ToCharArray();
             foreach (var movement in movements)
             {
+
+
+                if (!rover.Status)
+                {
+                    return;
+                }
+
                 var movementEnum = EnumHelper<MovementEnum>.GetValueFromName(movement.ToString());
+                rover.PreviousCoordinate.X = rover.Coordinate.X;
+                rover.PreviousCoordinate.Y = rover.Coordinate.Y;
+                rover.PreviousOrientation = rover.Orientation;
+
                 switch (movementEnum)
                 {
+                      
                     case MovementEnum.Left:
                         rover.TurnLeft();
                         break;

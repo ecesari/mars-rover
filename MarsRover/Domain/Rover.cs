@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Linq;
 using MarsRover.Enums;
 
 namespace MarsRover.Domain
 {
     public class Rover
     {
-        public Coordinate _coordinate;
-        public OrientationEnum _orientation;
-        public Plateau _plateau;
+        private Coordinate _coordinate;
+        private OrientationEnum _orientation;
+        private Plateau _plateau;
+        private Coordinate _previousCoordinate;
+        private OrientationEnum _previousOrientation;
+        public bool Status { get; set; }
 
 
         public Rover(Coordinate coordinate, OrientationEnum orientation, Plateau plateau)
@@ -15,6 +19,21 @@ namespace MarsRover.Domain
             _coordinate = coordinate;
             _orientation = orientation;
             _plateau = plateau;
+            Status = true;
+            _previousCoordinate = new Coordinate();
+        }
+
+
+        public Coordinate PreviousCoordinate
+        {
+            get => _previousCoordinate;
+            set => _previousCoordinate = value;
+        }
+
+        public OrientationEnum PreviousOrientation
+        {
+            get => _previousOrientation;
+            set => _previousOrientation = value;
         }
 
         public Coordinate Coordinate
@@ -48,6 +67,11 @@ namespace MarsRover.Domain
 
         internal void Move()
         {
+            var plateau = Plateau;
+            var beacons = plateau.Beacons;
+            var beaconExists = beacons.Any(x => x.Orientation == Orientation && x.Coordinate.X == Coordinate.X && x.Coordinate.Y == Coordinate.Y);
+            if (beaconExists) return;
+
             switch (Orientation)
             {
                 case OrientationEnum.North:
@@ -60,17 +84,28 @@ namespace MarsRover.Domain
                     Coordinate.Y--;
                     break;
                 case OrientationEnum.East:
-                    Coordinate.X++; 
+                    Coordinate.X++;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
 
-            if (Coordinate.X <= Plateau.Coordinate.X && Coordinate.Y <= Plateau.Coordinate.Y) return;
+            if (Coordinate.X <= Plateau.Coordinate.X && Coordinate.Y <= Plateau.Coordinate.Y && Coordinate.X >= 0 && Coordinate.Y >= 0)
+            {
+                return;
+            }
 
-            Console.WriteLine($"Oops! Your rover will fall off of Mars! It's last position will be: {Coordinate.X} {Coordinate.Y} {Orientation.ToString()}");
-            Console.ReadLine();
-            throw new ArgumentOutOfRangeException();
+
+            Status = false;
+            var beacon = new Beacon(new Coordinate
+            {
+                X = PreviousCoordinate.X,
+                Y = PreviousCoordinate.Y
+            },Orientation = PreviousOrientation);
+            plateau.Beacons.Add(beacon);
+
+            
+            
         }
     }
 }
